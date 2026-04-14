@@ -4,7 +4,6 @@
 
 
 template <typename value_t> 
-
 __device__ void mma_m16n8k16_f32_accum(
     float &d1, float &d2, float &d3, float &d4, 
     uint32_t const &a1, uint32_t const &a2, uint32_t const &a3, uint32_t const &a4,
@@ -35,8 +34,8 @@ __device__ void mma_m16n8k16_f32_accum(
 }
 
 
-
 __device__ void cp_async_commit() { asm volatile("cp.async.commit_group;"); }
+
  
 template <int ngroups>
 __device__ void cp_async_wait() {
@@ -52,4 +51,19 @@ __device__ void cp_async(T *smem_to, T *gmem_from) {
     asm volatile("cp.async.cg.shared.global [%0], [%1], %2;"
                  :
                  : "r"(smem_ptr), "l"(gmem_from), "n"(size));
+}
+
+
+
+template<typename T>
+__device__ void ldmatrix_x4(
+    T *load_from, 
+    uint32_t &a1, uint32_t &a2, uint32_t &a3, uint32_t &a4
+) {
+    uint32_t smem_ptr = __cvta_generic_to_shared(load_from);
+    asm volatile("ldmatrix.sync.aligned.x4.m8n8.shared.b16" "{%0,%1,%2,%3};" 
+    : 
+    "=r"(a1), "=r"(a2), "=r"(a3), "=r"(a4)
+    : 
+    "r"(smem_ptr));
 }
