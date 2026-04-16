@@ -41,6 +41,7 @@ To keep the implementation focused and tractable:
 
 The codebase is modular and mirrors the structure of modern CUDA kernels:
 
+```text
 flash-attention/
 ├── include/
 │   ├── flash_attention.cuh
@@ -52,6 +53,8 @@ flash-attention/
 ├── src/
 │   └── main.cu
 └── README.md
+```
+
 
 
 ---
