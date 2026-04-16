@@ -41,13 +41,17 @@ To keep the implementation focused and tractable:
 
 The codebase is modular and mirrors the structure of modern CUDA kernels:
 
-include/
-├── flash_attention.cuh # high-level entry point
-├── forward_kernel.cuh # main kernel (prologue, mainloop, epilogue)
-├── load_store.cuh # cp.async, ldmatrix, memory movement
-├── gemm.cuh # mma wrappers / tensor core ops
-├── softmax.cuh # online softmax logic
-└── tensor.cuh # layouts, types, utilities
+flash-attention/
+├── include/
+│   ├── flash_attention.cuh
+│   ├── forward_kernel.cuh
+│   ├── load_store.cuh
+│   ├── gemm.cuh
+│   ├── softmax.cuh
+│   └── tensor.cuh
+├── src/
+│   └── main.cu
+└── README.md
 
 
 ---
