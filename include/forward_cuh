@@ -14,4 +14,8 @@ struct ForwardArg{
 
     const int n_Qblocks;
     const int n_KVblocks;
+
+    const int batch = blockIdx.z;
+    const int head = blockIdx.y;
+    const int Qblock = blockIdx.x;
 };
