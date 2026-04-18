@@ -5,4 +5,4 @@ struct flashForwardkernelConfig{
     const int B_r;
     const int B_c;
     const int nWarps;
-}
+};
