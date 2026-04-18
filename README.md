@@ -1,14 +1,14 @@
 # FlashAttention (CUDA, From Scratch)
 
-This repository contains a from-scratch CUDA C++ implementation of FlashAttention, built incrementally to understand both the algorithmic foundations and low-level GPU optimizations behind modern attention kernels.
+This repository contains a from-scratch CUDA C++ implementation of FlashAttention, built incrementally to understand both the algorithmic foundations and low-level GPU optimizations behind modern attention kernels. Inspired by Sonny's Blog on Flash Attention forward pass from scratch. I'll then take it further by implementing the backward pass. However, at first, and then in phases, I'll be optimizing the backward pass for the Hopper; I'll then redo the forward pass for the Hopper. 
 
-The project follows a structured, kernel-by-kernel approach inspired by FlashAttention v2, where an initial implementation is progressively optimized across multiple iterations — focusing on memory movement, tensor core utilization, and kernel efficiency.
+If I feel crazy enough, I might even go for the forward/backward passes for the blackwell. 
 
-By the final stages, the goal is to approach (and analyze) near state-of-the-art performance on Ampere GPUs.
+By the final stages, the goal is to approach (and analyze) near state-of-the-art performance on Ampere, Hopper, and Blackwell GPUs; and also have folks from top labs take a look and be impressed.
 
 ---
 
-## What This Repo Covers
+## What This Repo Currently Covers
 
 - Scaled dot-product attention with streaming, numerically stable softmax
 - Tiled FlashAttention (no materialization of QKᵀ)
@@ -34,28 +34,6 @@ To keep the implementation focused and tractable:
 - Sequence lengths divisible by tile sizes (typically 64–128)
 - FP16 / BF16 inputs and outputs
 - Softmax computed in FP32 (numerical stability)
-
----
-
-## Project Structure
-
-The codebase is modular and mirrors the structure of modern CUDA kernels:
-
-```text
-flash-attention/
-├── include/
-│   ├── flash_attention.cuh
-│   ├── forward_kernel.cuh
-│   ├── load_store.cuh
-│   ├── gemm.cuh
-│   ├── softmax.cuh
-│   └── tensor.cuh
-├── src/
-│   └── main.cu
-└── README.md
-```
-
-
 
 ---
 
