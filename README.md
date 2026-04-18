@@ -1,6 +1,6 @@
 # FlashAttention (CUDA, From Scratch)
 
-This repository contains a from-scratch CUDA C++ implementation of FlashAttention, built incrementally to understand both the algorithmic foundations and low-level GPU optimizations behind modern attention kernels. Inspired by [Sonny's Blog] (https://lubits.ch/flash/) on Flash Attention forward pass from scratch. I'll then take it further by implementing the backward pass. However, at first, and then in phases, I'll be optimizing the backward pass for the Hopper; I'll then redo the forward pass for the Hopper. 
+This repository contains a from-scratch CUDA C++ implementation of FlashAttention, built incrementally to understand both the algorithmic foundations and low-level GPU optimizations behind modern attention kernels. Inspired by [Sonny's Blog](https://lubits.ch/flash/) on Flash Attention forward pass from scratch. I'll then take it further by implementing the backward pass. However, at first, and then in phases, I'll be optimizing the backward pass for the Hopper; I'll then redo the forward pass for the Hopper. 
 
 If I feel crazy enough, I might even go for the forward/backward passes for the blackwell. 
 
