@@ -1,4 +1,5 @@
 
+
 #include <float.h>
 #include <cuda_runtime.h>
 #include <stdlib.h> 
@@ -11,7 +12,11 @@ __global__ void dummy(const float *Q, const float *K, float *S){
 
    __shared__ float sQ[16];
    __shared__ float sK[16];
+   __shared__ float sS[4];
    int rowStart{0}; 
+
+   float rowMax = -INFINITY;
+   float rowSum = {}; 
     
         sQ[rowStart * 8 + tid] = Q[(rowStart) * 8 + tid];
         sQ[(rowStart + 1) * 8 + tid] = Q[(rowStart + 1) * 8 + tid];
@@ -32,15 +37,68 @@ __global__ void dummy(const float *Q, const float *K, float *S){
                accum += sQ[tRow * 8 + i] * sK[tCol * 8 + i];
          }
          
-         S[tRow * 4 + (kRowStart + tCol)] = accum;
+         sS[tRow * 2 + tCol] = accum;
          };
 
           __syncthreads();
-  } 
+
+          if (tid == 0) {
+            if (kRowStart == 0) {
+                rowMax = fmaxf(sS[0], sS[1]);
+                rowSum = expf(sS[0] - rowMax) + expf(sS[1] - rowMax);
+            }
+
+            else{
+                float oldMax = rowMax;
+                float tileMax = fmaxf(sS[0], sS[1]);
+                float newMax = fmaxf(oldMax, tileMax);
+                float scale = expf(oldMax - newMax);
+
+                rowSum = rowSum * scale + expf(sS[0] - newMax) + expf(sS[1] - newMax);
+
+                rowMax = newMax;
+            }
+          }
+
+          if (tid == 2){
+
+                if (kRowStart == 0) {
+                rowMax = fmaxf(sS[2], sS[3]);
+                rowSum = expf(sS[2] - rowMax) + expf(sS[3] - rowMax);
+            }
+
+            else {
+                float oldMax = rowMax;
+                float tileMax = fmaxf(sS[2], sS[3]);
+                float newMax = fmaxf(oldMax, tileMax);
+                float scale = expf(oldMax - newMax);
+
+                rowSum = rowSum * scale + expf(sS[2] - newMax) + expf(sS[3] - newMax);
+
+                rowMax = newMax;
+            }
+
+          }
+
+                      __syncthreads();
+
+          }
+
+
+    if (tid == 0) {
+    printf("row 0: max=%f sum=%f\n", rowMax, rowSum);
+}
+
+if (tid == 2) {
+    printf("row 1: max=%f sum=%f\n", rowMax, rowSum);
+}
+
+return;
+}
+
+
   
-  return; 
-  
-  }
+
 
 
 int main() {
