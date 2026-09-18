@@ -96,11 +96,6 @@ if (tid == 2) {
 return;
 }
 
-
-  
-
-
-
 int main() {
     int N = 2 * 8;
     std::vector<float> q = {1.0f,2.0f,3.0f,4.0f,5.0f,6.0f,7.0f,8.0f,2.0f,2.0f,2.0f,2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
